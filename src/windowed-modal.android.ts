@@ -35,11 +35,18 @@ interface CustomDialogOptions {
 }
 
 export function overrideModalViewMethod(): void {
+    (viewModule.View as any).prototype._showNativeModalViewOld = (viewModule.View as any).prototype._showNativeModalView;
     (viewModule.View as any).prototype._showNativeModalView = androidModal;
 }
 
 // https://github.com/NativeScript/NativeScript/blob/master/tns-core-modules/ui/core/view/view.android.ts
 function androidModal(parent: any, options: ExtendedShowModalOptions) {
+
+    if (!options.windowedModal) {
+        (viewModule.View as any).prototype._showNativeModalViewOld.call(this, parent, options);
+
+        return
+    }
 
     viewCommon.prototype._showNativeModalView.call(this, parent, options);
 

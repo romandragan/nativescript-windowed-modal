@@ -28,7 +28,7 @@ const VueWindowedModal = {
             }
         });
 
-        Vue.prototype.$showModal = function(component, options) {
+        Vue.prototype.$showWindowedModal = function(component, options) {
             const defaultOptions = {
                 fullscreen: false,
                 animated: true,
@@ -68,7 +68,8 @@ const VueWindowedModal = {
                     animated: options.animated,
                     stretched: options.stretched,
                     dimAmount: options.dimAmount,
-                    ios: options.ios
+                    ios: options.ios,
+                    windowedModal: true
                 });
             });
         };

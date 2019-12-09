@@ -5,11 +5,18 @@ import { ExtendedShowModalOptions } from "./windowed-modal.common";
 const viewCommon = require("ui/core/view/view-common").ViewCommon;
 
 export function overrideModalViewMethod(): void {
+    (viewModule.View as any).prototype._showNativeModalViewOld = (viewModule.View as any).prototype._showNativeModalView;
     (viewModule.View as any).prototype._showNativeModalView = iosModal;
 }
 
 // https://github.com/NativeScript/NativeScript/blob/master/tns-core-modules/ui/core/view/view.ios.ts
 function iosModal(parent: any, options: ExtendedShowModalOptions) {
+
+    if (!options.windowedModal) {
+        (viewModule.View as any).prototype._showNativeModalViewOld.call(this, parent, options);
+
+        return
+    }
 
     const dimAmount = options.dimAmount !== undefined ? +options.dimAmount : 0.5;
     const dimmingColor = this.backgroundColor || (this.content ? this.content.backgroundColor : undefined);
