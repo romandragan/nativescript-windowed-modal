@@ -1,6 +1,6 @@
+import { StackLayout } from "@nativescript/core";
 import { GestureEventData } from "@nativescript/core/ui/gestures/gestures";
 import { booleanConverter, CSSType, isIOS, layout, LayoutBase, View } from "@nativescript/core/ui/layouts/layout-base";
-import { StackLayout } from "@nativescript/core/ui/layouts/stack-layout/stack-layout";
 import { HorizontalAlignment, VerticalAlignment } from "@nativescript/core/ui/styling/style-properties";
 
 @CSSType("ModalStack")
