@@ -1,5 +1,5 @@
+import { Trace } from "@nativescript/core";
 import * as viewModule from "@nativescript/core/ui/core/view";
-import { traceCategories, traceMessageType, traceWrite } from "@nativescript/core/ui/core/view-base";
 import { ExtendedShowModalOptions } from "./windowed-modal.common";
 // tslint:disable-next-line:no-implicit-dependencies
 const viewCommon = require("@nativescript/core/ui/core/view/view-common").ViewCommon;
@@ -20,25 +20,25 @@ function iosModal(parent: any, options: ExtendedShowModalOptions) {
 
     const dimAmount = options.dimAmount !== undefined ? +options.dimAmount : 0.5;
     const dimmingColor = this.backgroundColor || (this.content ? this.content.backgroundColor : undefined);
-    const parentWithController = viewModule.ios.getParentWithViewController(parent);
+    const parentWithController = viewModule.IOSHelper.getParentWithViewController(parent);
     if (!parentWithController) {
-        traceWrite(`Could not find parent with viewController for ${parent} while showing modal view.`,
-            traceCategories.ViewHierarchy, traceMessageType.error);
+        Trace.write(`Could not find parent with viewController for ${parent} while showing modal view.`,
+            Trace.categories.ViewHierarchy, Trace.messageType.error);
 
         return;
     }
 
     const parentController = parentWithController.viewController;
     if (parentController.presentedViewController) {
-        traceWrite("Parent is already presenting view controller. Close the current modal page before showing another one!",
-            traceCategories.ViewHierarchy, traceMessageType.error);
+        Trace.write("Parent is already presenting view controller. Close the current modal page before showing another one!",
+            Trace.categories.ViewHierarchy, Trace.messageType.error);
 
         return;
     }
 
     if (!parentController.view || !parentController.view.window) {
-        traceWrite("Parent page is not part of the window hierarchy.",
-            traceCategories.ViewHierarchy, traceMessageType.error);
+        Trace.write("Parent page is not part of the window hierarchy.",
+            Trace.categories.ViewHierarchy, Trace.messageType.error);
 
         return;
     }
@@ -49,7 +49,7 @@ function iosModal(parent: any, options: ExtendedShowModalOptions) {
     let controller = this.viewController;
     if (!controller) {
         const nativeView = this.ios || this.nativeViewProtected;
-        controller = viewModule.ios.UILayoutViewController.initWithOwner(new WeakRef(this));
+        controller = viewModule.IOSHelper.UILayoutViewController.initWithOwner(new WeakRef(this));
 
         if (nativeView instanceof UIView) {
             controller.view.addSubview(nativeView);
@@ -77,7 +77,7 @@ function iosModal(parent: any, options: ExtendedShowModalOptions) {
 
         if (presentationStyle === UIModalPresentationStyle.Popover) {
             const popoverPresentationController = controller.popoverPresentationController;
-            this._popoverPresentationDelegate = (viewModule.ios as any).UIPopoverPresentationControllerDelegateImp.initWithOwnerAndCallback(new WeakRef(this), this._closeModalCallback);
+            this._popoverPresentationDelegate = viewModule.IOSHelper.UIPopoverPresentationControllerDelegateImp.initWithOwnerAndCallback(new WeakRef(this), this._closeModalCallback);
             popoverPresentationController.delegate = this._popoverPresentationDelegate;
             const view = parent.nativeViewProtected;
             // Note: sourceView and sourceRect are needed to specify the anchor location for the popover.

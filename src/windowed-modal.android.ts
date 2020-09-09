@@ -1,6 +1,6 @@
 import { android as androidApp, AndroidActivityBackPressedEventData } from "@nativescript/core/application";
 import { Color } from "@nativescript/core/color";
-import { screen } from "@nativescript/core/platform";
+import { Screen } from "@nativescript/core/platform";
 import * as viewModule from "@nativescript/core/ui/core/view";
 import { ExtendedShowModalOptions } from "./windowed-modal.common";
 
@@ -55,8 +55,8 @@ function androidModal(parent: any, options: ExtendedShowModalOptions) {
     }
 
     // setTimeout(() => {
-    this.width = screen.mainScreen.widthDIPs + 1;
-    this.height = screen.mainScreen.heightDIPs + 1;
+    this.width = Screen.mainScreen.widthDIPs + 1;
+    this.height = Screen.mainScreen.heightDIPs + 1;
     this.horizontalAlignment = "stretch";
     this.verticalAlignment = "stretch";
     // }, 5);
@@ -68,6 +68,7 @@ function androidModal(parent: any, options: ExtendedShowModalOptions) {
 
         if (DialogFragmentStatic) { return DialogFragmentStatic; }
 
+        @NativeClass()
         class CustomDialogImpl extends android.app.Dialog {
             constructor(public fragment: CustomDialogFragmentImpl,
                 context: android.content.Context,
@@ -105,6 +106,7 @@ function androidModal(parent: any, options: ExtendedShowModalOptions) {
             }
         }
 
+        @NativeClass()
         class CustomDialogFragmentImpl extends androidx.fragment.app.DialogFragment {
             public owner: viewModule.View;
             private _fullscreen: boolean;
